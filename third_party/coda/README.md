@@ -2,13 +2,13 @@
 
 Cursor plugin that connects agents to [Coda](https://coda.io) through Coda's official remote [Model Context Protocol](https://modelcontextprotocol.io/) server.
 
-Search and read Coda docs, pages, and tables, and create or update pages and rows with the same access the signed-in user has.
+Search and read Coda docs, pages, and tables, and create or update pages and rows under the permissions of a personal access token you provide.
 
 ## Install
 
 1. Open **Cursor Settings → Plugins**.
 2. Search for **Coda**.
-3. Click **Install**, then complete the Coda sign-in prompt.
+3. Click **Install**, then set your Coda personal access token (below).
 
 Or run `/add-plugin coda` in chat.
 
@@ -19,13 +19,16 @@ Or run `/add-plugin coda` in chat.
   "mcpServers": {
     "coda": {
       "type": "http",
-      "url": "https://docs.superhuman.com/apis/mcp"
+      "url": "https://docs.superhuman.com/apis/mcp",
+      "headers": {
+        "Authorization": "Bearer ${CODA_API_TOKEN}"
+      }
     }
   }
 }
 ```
 
-Auth is OAuth 2 with PKCE. Cursor prompts for sign-in when the plugin connects. An OAuth connection is automatically scoped to both read and write.
+Auth is a Superhuman Docs **personal access token** sent as a bearer token. Create one under **Account → API settings** with restriction type **MCP**, then set it in **Dashboard → Plugins → Configure**. A token can be scoped read-only, write-only, or read+write.
 
 ## Before you connect
 
@@ -46,9 +49,9 @@ The hosted runtime is the source of truth for tool names and schemas.
 
 ## Notes
 
-- Tool calls run as the user who authorizes the connection.
+- Tool calls run with the permissions of the personal access token.
 - The older `https://coda.io/apis/mcp` address still serves existing connections, but Superhuman's changelog says new setups should use `docs.superhuman.com/apis/mcp` — so that is what this plugin ships.
-- Superhuman also accepts a personal access token sent as `Authorization: Bearer <token>`, which lets you pick read-only, write-only, or read+write instead of OAuth's read+write. The token must be created with restriction type **MCP** or the server returns 401. Superhuman currently recommends the token path for Cursor because of refresh-token handling.
+- Superhuman also supports OAuth 2 with PKCE, but Cursor's refresh-token handling against this server is unreliable, so this plugin ships the token path Superhuman recommends for Cursor. The token must be created with restriction type **MCP** or the server returns 401.
 - The `coda-mcp` npm package is a community local server by a third-party maintainer, unrelated to this hosted endpoint.
 
 ## Docs

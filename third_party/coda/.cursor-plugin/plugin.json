@@ -29,5 +29,18 @@
     "mcp",
     "knowledge"
   ],
+  "variables": {
+    "type": "object",
+    "properties": {
+      "CODA_API_TOKEN": {
+        "type": "string",
+        "title": "Coda personal access token",
+        "description": "API token created in Superhuman Docs (Coda) under Account \u2192 API settings with restriction type MCP."
+      }
+    },
+    "required": [
+      "CODA_API_TOKEN"
+    ]
+  },
   "mcpServers": "./mcp.json"
 }

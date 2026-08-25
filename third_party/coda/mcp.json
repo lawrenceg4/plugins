@@ -2,7 +2,10 @@
   "mcpServers": {
     "coda": {
       "type": "http",
-      "url": "https://docs.superhuman.com/apis/mcp"
+      "url": "https://docs.superhuman.com/apis/mcp",
+      "headers": {
+        "Authorization": "Bearer ${CODA_API_TOKEN}"
+      }
     }
   }
 }
